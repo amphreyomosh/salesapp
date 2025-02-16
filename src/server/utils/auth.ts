@@ -1,5 +1,5 @@
 import { hash, compare } from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions, Secret } from "jsonwebtoken";
 import { authConfig } from "../config/config";
 import { securityConfig } from "../config";
 
@@ -31,15 +31,20 @@ export const AuthUtils = {
     if (!authConfig.jwt.secret) {
       throw new Error("JWT secret is not configured");
     }
-    return jwt.sign(
-      { userId, isAdmin } as JWTPayload,
-      authConfig.jwt.secret,
-      { expiresIn: authConfig.jwt.expiresIn }
-    );
+
+    const payload: JWTPayload = { userId, isAdmin };
+    const options: SignOptions = {
+      expiresIn: parseInt(authConfig.jwt.expiresIn) || "24h",
+    };
+
+    return jwt.sign(payload, authConfig.jwt.secret as Secret, options);
   },
 
   verifyToken: async (token: string): Promise<JWTPayload> => {
     if (!token) throw new Error("Token is required");
+    if (!authConfig.jwt.secret) {
+      throw new Error("JWT secret is not configured");
+    }
 
     return jwt.verify(token, authConfig.jwt.secret) as JWTPayload;
   },
@@ -52,10 +57,5 @@ export const AuthUtils = {
   validatePayloadSize: (size: number) => {
     const maxSize = parseInt(securityConfig.validation.maxPayloadSize);
     return size <= maxSize;
-  }
-};
-
-export const verifyToken = async (token: string): Promise<JWTPayload> => {
-  if (!token) throw new Error("Token is required");
-  return jwt.verify(token, authConfig.jwt.secret as jwt.Secret) as JWTPayload;
+  },
 };

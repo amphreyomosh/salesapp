@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyToken, AuthUtils } from "../server/utils/auth";
+import { AuthUtils } from "../server/utils/auth";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
@@ -8,9 +8,8 @@ export async function middleware(request: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-
   try {
-    const decoded = await verifyToken(token);
+    const decoded = verifyToken(token) as unknown as { isAdmin: boolean };
     if (!decoded.isAdmin) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
@@ -23,3 +22,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: "/admin/:path*",
 };
+function verifyToken(token: string) {
+  throw new Error("Function not implemented.");
+}
+
