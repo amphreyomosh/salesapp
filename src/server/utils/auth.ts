@@ -33,7 +33,7 @@ export const AuthUtils = {
     }
     return jwt.sign(
       { userId, isAdmin } as JWTPayload,
-      authConfig.jwt.secret as jwt.Secret,
+      authConfig.jwt.secret,
       { expiresIn: authConfig.jwt.expiresIn }
     );
   },
@@ -52,5 +52,10 @@ export const AuthUtils = {
   validatePayloadSize: (size: number) => {
     const maxSize = parseInt(securityConfig.validation.maxPayloadSize);
     return size <= maxSize;
-  },
+  }
+};
+
+export const verifyToken = async (token: string): Promise<JWTPayload> => {
+  if (!token) throw new Error("Token is required");
+  return jwt.verify(token, authConfig.jwt.secret as jwt.Secret) as JWTPayload;
 };

@@ -22,9 +22,7 @@ export default function Profile() {
       return;
     }
 
-    // Decode the JWT token to get user info
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
       const storedUser = localStorage.getItem("user");
 
       if (storedUser) {

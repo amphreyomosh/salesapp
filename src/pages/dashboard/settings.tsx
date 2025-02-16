@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { FiBell, FiLock, FiGlobe } from "react-icons/fi";
+import { FiBell, FiGlobe } from "react-icons/fi";
 
 export default function Settings() {
   const [emailNotifications, setEmailNotifications] = useState(true);

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyToken } from "../server/utils/auth";
+import { verifyToken, AuthUtils } from "../server/utils/auth";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
@@ -15,11 +15,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 }
 
 export const config = {
   matcher: "/admin/:path*",
-}; 
+};

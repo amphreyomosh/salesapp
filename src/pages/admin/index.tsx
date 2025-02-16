@@ -12,7 +12,7 @@ interface AdminStats {
 export default function AdminDashboard() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState<AdminStats>({
+  const [stats] = useState<AdminStats>({
     totalUsers: 0,
     totalListings: 0,
     pendingApprovals: 0,
