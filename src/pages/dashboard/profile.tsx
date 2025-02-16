@@ -24,7 +24,6 @@ export default function Profile() {
 
     try {
       const storedUser = localStorage.getItem("user");
-
       if (storedUser) {
         const userProfile = JSON.parse(storedUser);
         setProfile({
