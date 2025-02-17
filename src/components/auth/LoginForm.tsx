@@ -37,7 +37,17 @@ export function LoginForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        // Handle specific error messages from the server
+        if (data.message === "User not found") {
+          setError(
+            "No account found with this email. Please check your email or sign up."
+          );
+        } else if (data.message === "Invalid password") {
+          setError("Incorrect password. Please try again.");
+        } else {
+          setError(data.message || "Login failed. Please try again.");
+        }
+        return;
       }
 
       if (data.token) {
@@ -51,7 +61,7 @@ export function LoginForm() {
       }
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "An error occurred during login"
+        "Unable to connect to the server. Please check your internet connection and try again."
       );
       console.error("Login error:", err);
     } finally {
