@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { AuthUtils } from "../server/utils/auth";
+import { AuthUtils } from "../utils/auth";
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
@@ -21,5 +21,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: [
+    "/api/admin/:path*", // Protect admin API routes
+    "/api/protected/:path*", // Protect other sensitive API routes
+  ],
 };
