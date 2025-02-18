@@ -1,9 +1,12 @@
+const isProd = process.env.NODE_ENV === "production";
+
 export const apiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api",
+  baseUrl: isProd ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:3000",
   endpoints: {
     auth: {
-      login: "/auth/login",
-      signup: "/auth/signup",
+      login: "/api/auth/login",
+      signup: "/api/auth/signup",
+      verify: "/api/auth/verify",
     },
   },
 };

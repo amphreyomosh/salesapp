@@ -23,7 +23,7 @@ export function LoginForm() {
 
     try {
       const response = await fetch(
-        apiConfig.baseUrl + apiConfig.endpoints.auth.login,
+        `${apiConfig.baseUrl}${apiConfig.endpoints.auth.login}`,
         {
           method: "POST",
           headers: {
@@ -37,7 +37,6 @@ export function LoginForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle specific error messages from the server
         if (data.message === "User not found") {
           setError(
             "No account found with this email. Please check your email or sign up."
@@ -51,19 +50,15 @@ export function LoginForm() {
       }
 
       if (data.token) {
-        // Store the token
         localStorage.setItem("token", data.token);
-        // Store user info
         localStorage.setItem("user", JSON.stringify(data.user));
-
-        // Redirect to dashboard or home page
         router.push("/dashboard");
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError(
         "Unable to connect to the server. Please check your internet connection and try again."
       );
-      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
